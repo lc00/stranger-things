@@ -1,66 +1,74 @@
 const axios = require('axios')
-let summary 
 
-// axios.get('https://api.tvmaze.com/singlesearch/shows?q=stranger-things&amp;embed=episodes')
-//   .then(result => {
-//     // console.log(`result: ${result}`)
-//     // // result = JSON.(result)
-//     // console.log(`summary: ${result.data.summary}`)
-//     summary = result.data.summary
+async function getTvShow(url) {
+  try{
+    const result = await axios.get(url)
+    return result.data
+  } catch (error) {
+    return console.error(`error: ${error}`)
+  }
+}
 
+function createWordObj(tvShow) {
+  try{
+    let summary = tvShow.summary
+  
+    // https://stackoverflow.com/questions/3790681/regular-expression-to-remove-html-tags
+    summary = summary.replace(/<[^>]*>/gm, '')
+  
+    summary = summary.replace(/[,\.;:"]/gm, '')
+  
+    let arr = summary.split(' ')
+    let obj = {}
+  
+    arr.forEach(element => {
+      element = element.toLowerCase()
+      element in obj ? obj[element] +=1 : obj[element] = 1
+    });
+  
+    return obj  
+  } catch (error) {
+    return console.error(`error: ${error}`)
+  }
+}
 
-//     summary = summary.replace(/<[^>]*>/gm, '')
+function getMostPopularWords(obj, numOfWords) {
+  try {
+    let finalResultArr
+    let str = ''
+  
+    finalResultArr = Object.keys(obj).sort((a,b) => {
+      return obj[b] - obj[a]
+    })
+  
+    let count = 0
+    while(count < numOfWords) {
+      let key = finalResultArr.shift()
+      str += key 
+      str += '('
+      str += obj[key]
+      str += ')'
+  
+      if(numOfWords - count > 1) str +=','
+  
+      count++
+    }
+    return str
+  } catch (error) {
+    console.error(`error: ${error}`)
+  }
+}
 
-//     console.log(summary)
+async function taskA(url) {
+  const numOfWords = 5
 
-//   })
-//   .catch(error => {
-//     console.error(`error: ${error}`)
-//   })
-
-summary = "<p>A love letter to the '80s classics: that captivated a generation, <b>Stranger Things</b> is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl.</p>"
-summary = summary.replace(/<[^>]*>/gm, '')
-summary = summary.replace(/[,\.;:"]/gm, '')
-console.log(summary)
-
-/*
-// replace , . <b> </b>  with ''
-// use object to store word and count
-*/
-function test(summary) {
-
-  let arr = summary.split(' ')
-  let obj = {}
-
-  arr.forEach(element => {
-    element = element.toLowerCase()
-    element in obj ? obj[element] +=1 : obj[element] = 1
-  });
-
-  return obj  
+  const tvShow = await getTvShow(url)
+  const wordObj = createWordObj(tvShow)
+  const result = getMostPopularWords(wordObj, numOfWords)
+  
+  const showId = tvShow.id
+  return [showId, result]
 
 }
 
-let resultObj = test(summary)
-
-let str = ''
-let result = {}
-
-// find the hightest value and put in array
-  let finalResultArr
-
-  let keys = Object.keys(resultObj)
-
-  finalResultArr = keys.sort((a,b) => {
-    return resultObj[b] - resultObj[a]
-  })
-console.log('finalResultArr', finalResultArr)
-
-let count = 0
-while(count < 5) {
-  let key = finalResultArr.shift()
-  console.log(key, resultObj[key])
-  count++
-}
-
-
+module.exports = taskA
