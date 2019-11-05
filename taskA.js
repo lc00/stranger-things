@@ -9,16 +9,28 @@ async function getTvShow(url) {
   }
 }
 
-function createWordObj(tvShow) {
+async function getAllEpisodes(showId) {
+  const result = await axios.get(`https://api.tvmaze.com/shows/${showId}/episodes`)
+  return result.data
+}
+
+  
+
+function createWordObj(episodeArr) {
   try{
-    let summary = tvShow.summary
+    let combinedSummary = ""
+
+    for(let i = 0; i < episodeArr.length; i++) {
+      let { summary } = episodeArr[i]
+      combinedSummary += summary  
+    }
   
     // https://stackoverflow.com/questions/3790681/regular-expression-to-remove-html-tags
-    summary = summary.replace(/<[^>]*>/gm, '')
+    combinedSummary = combinedSummary.replace(/<[^>]*>/gm, '')
   
-    summary = summary.replace(/[,\.;:"]/gm, '')
+    combinedSummary = combinedSummary.replace(/[,\.;:"]/gm, '')
   
-    let arr = summary.split(' ')
+    let arr = combinedSummary.split(' ')
     let obj = {}
   
     arr.forEach(element => {
@@ -63,11 +75,13 @@ async function taskA(url) {
   const numOfWords = 5
 
   const tvShow = await getTvShow(url)
-  const wordObj = createWordObj(tvShow)
+  const episodeArr = await getAllEpisodes(tvShow.id)
+
+  const wordObj = createWordObj(episodeArr)
   const result = getMostPopularWords(wordObj, numOfWords)
   
   const showId = tvShow.id
-  return [showId, result]
+  return [showId, episodeArr, result]
 
 }
 

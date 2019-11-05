@@ -21,10 +21,9 @@ function getEpisodeId(episodeArr, word) {
   return `Cannot find the episode Id that has ${word}`
 }
 
-async function taskB(showId, word) {
-  const episodeArr = await getAllEpisodes(showId, word)
-  const result = getEpisodeId(episodeArr, 'Dustin')
-  return [episodeArr, result]
+async function taskB(episodeArr, word) {
+  const result = getEpisodeId(episodeArr, word)
+  return result
 }
 
 module.exports = taskB
