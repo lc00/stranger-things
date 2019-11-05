@@ -1,0 +1,23 @@
+{
+  "name": "strangers-things-code-challenge",
+  "version": "1.0.0",
+  "description": "## Prerequisite",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lc00/stranger-things.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lc00/stranger-things/issues"
+  },
+  "homepage": "https://github.com/lc00/stranger-things#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "moment": "^2.24.0"
+  }
+}
