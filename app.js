@@ -9,9 +9,9 @@
   const resultB = await taskB(episodes, word)
   const resultC = taskC(episodes, showId)
 
-  console.log(resultA)
-  console.log(`episode id: ${resultB}`)
-  console.log(JSON.stringify(resultC, null, 2))
+  console.log(`Task-A: 5 most popular summary words => ${resultA}`)
+  console.log(`Task-B: the very first time where Dustin is mentioned is in episode id: ${resultB}`)
+  console.log(`Task-C: re-format the json => `, JSON.stringify(resultC, null, 2))
   
   return
 })()
