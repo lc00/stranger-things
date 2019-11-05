@@ -1,4 +1,3 @@
-
 (async function() {
   const url = 'https://api.tvmaze.com/singlesearch/shows?q=stranger-things&amp;embed=episodes'
   const taskA = require('./taskA')
@@ -12,6 +11,7 @@
 
   console.log(resultA)
   console.log(`episode id: ${resultB}`)
-  console.log(resultC)
+  console.log(JSON.stringify(resultC, null, 2))
+  
   return
 })()
