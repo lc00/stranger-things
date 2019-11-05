@@ -5,8 +5,8 @@
   const taskC = require('./taskC')
   const word = 'Dustin'
 
-  const [showId, resultA]= await taskA(url)
-  const [episodes, resultB] = await taskB(showId, word)
+  const [showId, episodes, resultA]= await taskA(url)
+  const resultB = await taskB(episodes, word)
   const resultC = taskC(episodes, showId)
 
   console.log(resultA)
